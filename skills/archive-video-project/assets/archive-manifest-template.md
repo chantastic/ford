@@ -18,12 +18,12 @@
 | Thumbnail | `assets/thumb.png` | 1,234,567 | `yyyy-mm-dd-{video-name}-thumbnail.png` | ambiguous | Two candidate images; confirm |
 | Captions | `example.itt` | 45,678 | `yyyy-mm-dd-{video-name}-transcript.itt` | found | ITT kept as-is |
 
-## Source (`src/`)
+## Source (`source/`)
 
 | Source (relative) | Bytes | Archive path | Unit | Notes |
 | --- | --- | --- | --- | --- |
-| `screencapture/example-recording.zip` | 98,765,432,100 | `src/screencapture/example-recording.zip` | ZIP, not unpacked | Original recording, unchanged |
-| `assets/` | 2,345,678,901 | `src/assets/` | folder | Music, SFX, images |
+| `screencapture/example-recording.zip` | 98,765,432,100 | `source/screencapture/example-recording.zip` | ZIP, not unpacked | Original recording, unchanged |
+| `assets/` | 2,345,678,901 | `source/assets/` | folder | Music, SFX, images |
 
 ## Not archived (proposed)
 
@@ -45,7 +45,7 @@
 
 ## Linked media
 
-- {project file} references media by path; the new `src/` layout changes / preserves those paths.
+- {project file} references media by path; the new `source/` layout changes / preserves those paths.
 
 ## Verification
 

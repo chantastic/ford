@@ -13,7 +13,7 @@ The names below are generic patterns. Real projects, especially older ones, will
 
 If a deliverable is missing, list it as missing. Do not produce it unless the user asks for that as a separate task.
 
-## Source (`src/`)
+## Source (`source/`)
 
 Everything that is not a deliverable but is needed to understand or rebuild the video:
 
@@ -22,19 +22,19 @@ Everything that is not a deliverable but is needed to understand or rebuild the 
 - Editing project files, such as `.drp`, `.prproj`, `.fcpbundle`, and `.aep`.
 - Supporting assets: B-roll, sound effects, music (with any license files), images, and graphics.
 
-Keep camera-card trees (such as `DCIM/…` or `PRIVATE/…`) intact, and keep checksum sidecars (`.mhl`, `.md5`) next to the files they describe. If an editing project references media by relative path, keep that relative arrangement inside `src/`. If the new layout would break references, say so in the manifest rather than quietly reshuffling files.
+Keep camera-card trees (such as `DCIM/…` or `PRIVATE/…`) intact, and keep checksum sidecars (`.mhl`, `.md5`) next to the files they describe. If an editing project references media by relative path, keep that relative arrangement inside `source/`. If the new layout would break references, say so in the manifest rather than quietly reshuffling files.
 
 ## Variants you will see in existing projects
 
 Examples of layouts already in use. Any one project may mix several of these:
 
-- Sources already in `src/`.
+- Sources in an older `src/` folder, or already in `source/`.
 - Screen recordings in `screencapture/`, sometimes as a Screen Studio ZIP.
-- Supporting files in an `assets/` folder next to the recordings, not inside `src/`.
+- Supporting files in an `assets/` folder next to the recordings, not inside the source folder.
 - Deliverables inside an `exports/` subfolder rather than at the root.
 - Undated or differently dated folder names, other suffixes (`-final`, `-v2`, `-yt`), and captions in `.itt` instead of `.srt`.
 
-For a **new archive**, map these into the target layout in the archive copy, and record each mapping and its reason. For example, `screencapture/` maps to `src/screencapture/`.
+For a **new archive**, map these into the target layout in the archive copy, and record each mapping and its reason. For example, `screencapture/` maps to `source/screencapture/`, and the contents of an older `src/` map to `source/`.
 
 For an **existing archive**, report the variants and leave them alone. Do not rename or restructure older archives unless the user asks for that specific change.
 

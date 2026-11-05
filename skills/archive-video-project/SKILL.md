@@ -22,7 +22,7 @@ Copy a finished video project into an archive folder that is easy to retrieve la
 
 ## Target layout
 
-Each archived project is one folder named `yyyy-mm-dd-{video-name}`, using the publish date (or the date the user gives) and a short, human-readable kebab-case name. Deliverables sit at the root so they are easy to find. Everything else goes in `src/`. There is no `exports/` folder.
+Each archived project is one folder named `yyyy-mm-dd-{video-name}`, using the publish date (or the date the user gives) and a short, human-readable kebab-case name. Deliverables sit at the root so they are easy to find. Everything else goes in `source/`. There is no `exports/` folder.
 
 ```text
 yyyy-mm-dd-{video-name}/
@@ -30,11 +30,11 @@ yyyy-mm-dd-{video-name}/
 ├── yyyy-mm-dd-{video-name}-x.mp4              # transcode for X
 ├── yyyy-mm-dd-{video-name}-thumbnail.jpg      # or .png
 ├── yyyy-mm-dd-{video-name}-transcript.srt     # captions; keep .itt if that is what exists
-└── src/
+└── source/
     └── ...                                     # original recordings and supporting assets
 ```
 
-`src/` holds original recordings (including recorder project bundles and archives, such as a Screen Studio ZIP) and supporting video, sound effects, music, and images. Inside `src/`, keep the relative layout that project files depend on. See [references/naming-and-layout.md](references/naming-and-layout.md) for naming variants, older archives, and what counts as which deliverable.
+`source/` holds original recordings (including recorder project bundles and archives, such as a Screen Studio ZIP) and supporting video, sound effects, music, and images. Inside `source/`, keep the relative layout that project files depend on. See [references/naming-and-layout.md](references/naming-and-layout.md) for naming variants, older archives, and what counts as which deliverable.
 
 ## Destinations
 
@@ -71,11 +71,11 @@ Read only. Do not open projects in their editing apps, because that can auto-sav
 Fill in [assets/archive-manifest-template.md](assets/archive-manifest-template.md):
 
 - **Deliverables:** for each of the four deliverables, the candidate source file, its size, its archive name, and your confidence. Mark each one as **missing** or **ambiguous** where that applies. For example, when two `.mov` files could be the master, list both and ask.
-- **Source:** every original recording and supporting asset, mapped to a path under `src/`.
+- **Source:** every original recording and supporting asset, mapped to a path under `source/`.
 - **Not archived:** caches, renders, or duplicates you propose to leave out, each with a reason. Leaving out original source requires the user's explicit instruction.
 - **Collisions:** any destination path that already exists or that two sources would share. Never overwrite. Propose keeping both or skipping, and let the user decide.
 - **Totals:** file count and bytes to copy, compared with the free space at the destination if that is visible.
-- **Linked media:** whether project files in `src/` reference media by paths that the new layout will change.
+- **Linked media:** whether project files in `source/` reference media by paths that the new layout will change.
 
 ### 4. Get approval for the copy
 
