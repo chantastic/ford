@@ -1,11 +1,12 @@
 # Archive manifest: yyyy-mm-dd-{video-name}
 
-> Proposed. Nothing has been copied or removed until the approvals below are checked.
+> Proposed. Nothing has been transferred or removed until the approval below is checked.
 
 - **Local project root:** `{local-project-root}`
 - **Project type:** educational / event
+- **Mode:** move (copy, verify, remove listed originals) / copy (keep local originals)
 - **Destination:** `{archive-root:<type>}/yyyy-mm-dd-{video-name}/`
-- **Source inside a Drive-synced tree:** yes / no (if yes, the source is a cloud-backed copy and is excluded from cleanup)
+- **Source inside a Drive-synced tree:** yes / no (if yes, the source files are cloud-backed and are never removed; copy only)
 - **Destination already exists:** yes / no
 - **Shared with external collaborators:** yes / no / unknown (event destinations: confirm the contents are appropriate)
 
@@ -39,30 +40,41 @@
 
 ## Totals
 
-- Files to copy: N
-- Bytes to copy: N
+- Files to transfer: N
+- Bytes to transfer: N
 - Destination free space (if visible): N
 
 ## Linked media
 
 - {project file} references media by path; the new `source/` layout changes / preserves those paths.
 
-## Verification
+## Transfer verification (gates removal)
 
-| Item | Copy check | Copy status | Remote evidence | Remote status |
+| Item | Copy completed | Bytes match | Checksum match | Status |
 | --- | --- | --- | --- | --- |
-| `yyyy-mm-dd-{video-name}-youtube.mov` | bytes / SHA-256 | verified / failed / not checked | connector size + MD5 / user-confirmed / none | verified / unverified / failed |
+| `yyyy-mm-dd-{video-name}-youtube.mov` | yes / no | yes / no | yes / no (SHA-256 or MD5) | verified / failed / not checked |
+| `source/screencapture/example-recording.zip` | yes / no | yes / no | yes / no | verified / failed / not checked |
 
-Overall: **verified / unverified**. If unverified, cleanup is blocked.
+Overall transfer: **verified / not verified**. If not verified, nothing is removed.
 
-## Local cleanup (optional; only after full verification)
+## Removal list (move mode)
 
-| Local path (exact) | Bytes | Inside synced tree | Removal method | Approved |
+Exactly the originals covered by this request. Approving this manifest authorizes their removal after the transfer is verified. Nothing else is removed.
+
+| Local path (relative to project root) | Bytes | Inside synced tree or archive | Removal method | Result |
 | --- | --- | --- | --- | --- |
-| | | no (yes means excluded) | OS trash / permanent | [ ] |
+| `exports/example-final.mov` | 12,345,678,901 | no (yes means excluded and kept) | OS trash / permanent (stated before acting) | removed / kept / failed |
+| `screencapture/example-recording.zip` | 98,765,432,100 | no | OS trash | removed / kept / failed |
 
-## Approvals
+Items under "Not archived" are left in place and are not on this list.
 
-- [ ] Mapping approved; the copy may proceed
-- [ ] Each cleanup path approved individually (approving the policy is not enough)
-- [ ] Or: keep local originals
+## Report
+
+- **Archived locally:** verified / not verified; originals removed / kept
+- **Cloud status:** cloud backed up (evidence: connector size + MD5 / user-confirmed) / sync pending / unverified
+- If sync is pending and originals were removed, the archive exists only on this machine until upload completes.
+
+## Approval
+
+- [ ] Manifest approved in **move** mode: transfer, verify, then remove the listed originals
+- [ ] Or: manifest approved in **copy** mode: keep local originals

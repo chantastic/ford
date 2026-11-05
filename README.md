@@ -10,7 +10,7 @@ Ford is a small, portable, instruction-only plugin. It packages [Agent Skills](h
 
 | Skill | What it does |
 | --- | --- |
-| [`archive-video-project`](skills/archive-video-project/SKILL.md) | Archives a finished video project (final exports, thumbnail, captions, and original source) to a Google Drive destination that you configure. It inventories first, proposes a source-to-archive mapping for approval, copies without moving, and verifies both the copy and the remote sync. Removing a local original needs your explicit approval for that exact file, and the skill never deletes anything from the archive. |
+| [`archive-video-project`](skills/archive-video-project/SKILL.md) | Moves a finished video project (final exports, thumbnail, captions, and original source) into a Google Drive destination that you configure. It inventories first and proposes a source-to-archive mapping for approval. Then it copies, verifies the transferred contents, and removes only the exact originals the approved mapping lists. Cloud sync is reported separately and doesn't block that cleanup. The skill never overwrites files and never deletes from the archive or any Drive-synced folder. |
 
 ## Archive layout
 
@@ -37,7 +37,7 @@ ford/
 │       ├── SKILL.md
 │       ├── references/
 │       │   ├── naming-and-layout.md   # deliverables, source/, and naming variants
-│       │   └── verification.md        # copy vs. remote evidence, synced-tree safety
+│       │   └── verification.md        # transfer vs. cloud evidence, synced-tree safety
 │       └── assets/
 │           └── archive-manifest-template.md
 └── README.md
@@ -53,7 +53,9 @@ Name the folder you are authorizing and the project type:
 - "Check the existing archive at `{archive-root:educational}/yyyy-mm-dd-{video-name}` against the layout. Don't change anything."
 - "Is the archive for yyyy-mm-dd-{video-name} fully synced? If you can't confirm it, say so."
 
-The skill stops for your approval twice: once before it copies anything, and again, per file, before it removes any local original. You can always choose to keep local originals.
+The skill stops once, for your approval of the manifest. In move mode (the default), that approval covers removing the exact originals it lists, and only after their transferred copies are verified by byte count and checksum. If verification fails, nothing is removed. Choose copy mode to keep local originals.
+
+The final report keeps two statuses separate. **Archived locally** means the transfer was verified. **Cloud backed up** requires server-side evidence; without it, the cloud status is *sync pending / unverified*. Until upload finishes, a moved archive exists only on your machine.
 
 Hosts decide on their own when to activate a skill, so activation isn't guaranteed. If it doesn't trigger, mention the skill by name.
 
@@ -73,8 +75,8 @@ For access, the skill uses either a Google Drive connector that the host provide
 ## Limitations
 
 - **Draft:** written from an agreed workflow, not yet checked against a real project. Expect revisions.
-- **Remote verification depends on the host.** Without a Drive connector that reports file size and checksum, the skill relies on what you can see in Drive. If it can't confirm the sync, it marks the archive *unverified* and blocks cleanup.
-- **No automation.** The skill doesn't render, transcode, or generate missing deliverables, and it ships no scripts. The agent performs the copy with the host's own file tools after you approve.
+- **Cloud confirmation depends on the host.** Without a Drive connector that reports file size and checksum, the skill relies on what you can see in Drive. Otherwise it reports *sync pending / unverified*. That status doesn't block local cleanup in move mode.
+- **No automation.** The skill doesn't render, transcode, or generate missing deliverables, and it ships no scripts. The agent performs the transfer with the host's own file tools after you approve.
 - **Recoverable deletion isn't guaranteed.** The skill uses the OS trash only when the host supports it, and otherwise says that removal is permanent.
 
 ## Evolving the skill

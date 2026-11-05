@@ -1,52 +1,56 @@
 # Verification
 
-Archive verification has two separate claims. Record evidence for each one, and never let the first stand in for the second.
+Archive status has two separate claims. Record evidence for each one, and never let one stand in for the other.
 
-| Claim | What it means | Status values |
-| --- | --- | --- |
-| Copy verified | The destination contains every approved item, intact | `verified`, `failed`, `not checked` |
-| Remote persistence verified | Google Drive's servers hold the files | `verified`, `unverified`, `failed` |
+| Claim | What it means | Status values | Gates |
+| --- | --- | --- | --- |
+| Transfer verified | The destination contains every approved item, and its contents match the source | `verified`, `failed`, `not checked` | Removing local originals (move mode) |
+| Cloud backed up | Google Drive's servers hold the files | `cloud backed up`, `sync pending / unverified`, `failed` | Nothing. It is reported, not required. |
 
-Cleanup of local originals requires **both** claims to be `verified` for every item being removed.
+In move mode, the approved manifest authorizes removing its listed originals once the transfer is verified. Cloud status does not block that removal, but it must be reported honestly.
 
-## Copy verification
+## Transfer verification
 
-Achievable evidence, from strongest to weakest:
+Required before removing any original:
 
-1. Checksums (for example SHA-256 or MD5) of source and destination files, when both can be read locally. This is slow for large recordings, so ask before hashing very large files.
-2. Exact byte count for every file, plus the total file count.
-3. Total bytes and file count per folder, which is acceptable only for app bundles and card trees treated as units.
+1. **Copy completed:** the copy operation reported success for every item, with no skipped or partial files.
+2. **Byte count:** each destination file's size equals the source's. For a folder, bundle, or camera-card tree, the file count and total bytes also match.
+3. **Checksum:** a checksum (for example SHA-256 or MD5) of the destination contents, read back from disk, matches the source. For folders and bundles, compare per file.
 
-On a streamed or online-only mounted Drive, reading a destination file for hashing can trigger a download. Tell the user before you do it.
+Insufficient on their own:
 
-## Remote persistence verification
+- A file name appearing in a mounted Drive folder.
+- An online-only placeholder, whose reported size comes from the cloud rather than from local content.
+- A size match without reading back the contents.
 
-A file appearing in a mounted Drive folder proves only that the local sync client knows about it. The upload may still be pending, paused, or failed. Local checksums of the mounted copy don't prove anything about the cloud.
+Newly copied files in a mounted Drive folder are normally stored locally while their upload is pending, so reading them back does not need a download. If a destination file turns out to be online-only, reading it can trigger a download. Tell the user, and don't treat the placeholder itself as evidence.
 
-Acceptable evidence, depending on what is available:
+Hashing very large recordings takes time. If the user doesn't want to wait, keep the originals (copy mode) instead of removing them without a checksum.
 
-- **Drive connector or API, if authorized:** the file exists at the expected location, and its reported size matches the local byte count. Where the service reports a content checksum (Drive reports MD5 for regular binary files), compare it with a local MD5 of the source. A match is strong evidence. Bundles and folders don't have a single checksum, so verify their contents file by file or by count and total size.
-- **Sync client status shown to the user:** the user confirms that the desktop sync client shows no pending or failed uploads for the destination. This is weaker evidence; record it as user-confirmed.
-- **Drive web interface:** the user confirms that the files appear on drive.google.com at the expected location with the expected sizes. Record this as user-confirmed.
+## Cloud status
 
-Do not read sync-client databases, logs, tokens, or browser sessions to infer status.
+A file in a mounted Drive folder proves only that the local sync client has it. Its upload may still be pending, paused, or failed. Local checksums show nothing about the cloud.
 
-If none of these is possible, record **unverified**, explain what would be needed, and stop before any cleanup. It is fine to finish the run with an unverified archive; the user can verify later.
+Evidence for **cloud backed up**, depending on what is available:
+
+- **Drive connector or API, if authorized:** the file exists at the expected location, and its reported size matches. Where the service reports a content checksum (Drive reports MD5 for regular binary files), compare it with the local MD5. Bundles and folders have no single checksum, so check their contents file by file, or by count and total size.
+- **Sync client status shown to the user:** the user confirms that the desktop sync client shows no pending or failed uploads for the destination. Record this as user-confirmed.
+- **Drive web interface:** the user confirms that the files appear on drive.google.com with the expected sizes. Record this as user-confirmed.
+
+Do not read sync-client databases, logs, tokens, or browser sessions to infer status. Without evidence, report **sync pending / unverified**.
 
 ## Synced-tree checks
 
-Before proposing any removal, check every path:
+Before removing anything, check every path on the removal list:
 
 - **Inside the archive destination:** never remove it.
-- **Inside any Drive-synced folder:** removing it removes the cloud copy too, and that change propagates. Exclude it from cleanup unless the user explicitly says otherwise for that exact path.
-- **Outside synced folders (a plain local working copy):** eligible for cleanup only with explicit, per-path approval after both verifications.
+- **Inside any Drive-synced folder:** never remove it as part of a move. Removal propagates to the cloud. Report it and keep it.
+- **Outside synced folders (a plain local working copy) and on the approved removal list:** remove it once the transfer is verified.
 
-Never do "move to archive, then delete the source." On a synced tree, that can propagate a deletion to the archive.
+Never use a naive "move, then delete" on synced trees. A move must never cause a deletion inside the archive or in the cloud.
 
 ## Removal
 
-If the user approves removing specific local originals:
-
-- Prefer recoverable removal, such as the operating system trash, only if the host actually supports it. Do not promise a recovery option that you can't confirm exists.
-- If the only available operation is permanent, say so before acting.
-- Keeping local originals is always an acceptable outcome.
+- Remove only the exact approved paths, and only when every item is transfer-verified. If any item fails, remove nothing.
+- Prefer recoverable removal, such as the operating system's trash, only if the host actually supports it. Do not promise a recovery option that you can't confirm exists. If only permanent removal is available, say so before acting.
+- Copy mode, which keeps the local originals, is always an acceptable outcome.
