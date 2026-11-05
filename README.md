@@ -22,7 +22,7 @@ yyyy-mm-dd-{video-name}/
 ├── yyyy-mm-dd-{video-name}-x.mp4            # transcode for X
 ├── yyyy-mm-dd-{video-name}-thumbnail.jpg    # or .png
 ├── yyyy-mm-dd-{video-name}-transcript.srt   # or .itt
-└── src/                                     # original recordings and supporting assets, unchanged
+└── source/                                  # original recordings and supporting assets, unchanged
 ```
 
 ## Package structure
@@ -36,7 +36,7 @@ ford/
 │   └── archive-video-project/
 │       ├── SKILL.md
 │       ├── references/
-│       │   ├── naming-and-layout.md   # deliverables, src/, and naming variants
+│       │   ├── naming-and-layout.md   # deliverables, source/, and naming variants
 │       │   └── verification.md        # copy vs. remote evidence, synced-tree safety
 │       └── assets/
 │           └── archive-manifest-template.md
