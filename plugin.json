@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ford",
+  "version": "0.1.0",
+  "description": "Portable, instruction-only agent skills for developer-education video production work.",
+  "author": {
+    "name": "chantastic",
+    "url": "https://github.com/chantastic"
+  },
+  "repository": "https://github.com/chantastic/ford",
+  "keywords": ["video", "video-production", "file-organization", "skills"]
+}

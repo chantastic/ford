@@ -1,0 +1,9 @@
+{
+  "name": "ford",
+  "version": "0.1.0",
+  "description": "Portable, instruction-only agent skills for developer-education video production work.",
+  "author": {
+    "name": "chantastic",
+    "url": "https://github.com/chantastic"
+  }
+}
