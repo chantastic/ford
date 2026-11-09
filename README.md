@@ -4,13 +4,14 @@ Workplace agent skills for my developer educator video production job.
 
 Ford is a small, portable, instruction-only plugin. It packages [Agent Skills](https://agentskills.io/specification) in the [Agent Plugins](https://agent-plugins.org) format, with a compatibility manifest for Claude Code. It contains no hooks, MCP servers, or scripts.
 
-> **Status: draft.** The skill below has not been reviewed against a real archive, and the plugin has not been loaded in any host yet. See [Limitations](#limitations).
+> **Status: draft.** The skills below have not been reviewed against real runs, and the plugin has not been loaded in any host yet. See [Limitations](#limitations).
 
 ## Skills
 
 | Skill | What it does |
 | --- | --- |
 | [`archive-video-project`](skills/archive-video-project/SKILL.md) | Moves a finished video project (final exports, thumbnail, captions, and original source) into a Google Drive destination that you configure. It inventories first and proposes a source-to-archive mapping for approval. Then it copies, verifies the transferred contents, and removes only the exact originals the approved mapping lists. Cloud sync is reported separately and doesn't block that cleanup. The skill never overwrites files and never deletes from the archive or any Drive-synced folder. |
+| [`sponsored-playlist-sync`](skills/sponsored-playlist-sync/SKILL.md) | Keeps a sponsor's "Sponsored by" YouTube playlist complete. It collects live placements from the sponsor's partner Slack channels, excludes review cuts and non-YouTube or not-yet-live placements, and verifies each video with `yt-dlp` (public, creator's main channel, full episode, sponsor mentioned). Then it diffs against the playlist, adds missing videos with a playlist-add tool if one is connected (otherwise hands you a list of links), re-verifies, and reports what's missing, excluded, or duplicated. It only adds; it never removes or reorders playlist entries. |
 
 ## Archive layout
 
@@ -33,13 +34,15 @@ ford/
 ├── .claude-plugin/
 │   └── plugin.json                # Claude Code compatibility manifest
 ├── skills/                        # shared by every host; one copy of each skill
-│   └── archive-video-project/
-│       ├── SKILL.md
-│       ├── references/
-│       │   ├── naming-and-layout.md   # deliverables, source/, and naming variants
-│       │   └── verification.md        # transfer vs. cloud evidence, synced-tree safety
-│       └── assets/
-│           └── archive-manifest-template.md
+│   ├── archive-video-project/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   ├── naming-and-layout.md   # deliverables, source/, and naming variants
+│   │   │   └── verification.md        # transfer vs. cloud evidence, synced-tree safety
+│   │   └── assets/
+│   │       └── archive-manifest-template.md
+│   └── sponsored-playlist-sync/
+│       └── SKILL.md
 └── README.md
 ```
 
@@ -72,11 +75,14 @@ Supply the real destinations privately at runtime. Either tell the agent during 
 
 For access, the skill uses either a Google Drive connector that the host provides and you authorize, or a Drive folder visibly mounted on your machine that you name. It never reads tokens, browser sessions, or sync-client databases, and it never changes sharing settings.
 
+`sponsored-playlist-sync` works the same way. It refers to `{sponsor}`, `{sponsor-playlist}`, `{partner-channels}` (with former names), and `{creator-channels}` only by placeholder. Keep the real playlist URL, Slack channel IDs, and YouTube channel IDs in your own memory or host configuration, not in this repo. It reads Slack through a connector you authorize and writes to the playlist only through a connected playlist-add tool. Without one, it hands you links to paste into YouTube Studio.
+
 ## Limitations
 
 - **Draft:** written from an agreed workflow, not yet checked against a real project. Expect revisions.
 - **Cloud confirmation depends on the host.** Without a Drive connector that reports file size and checksum, the skill relies on what you can see in Drive. Otherwise it reports *sync pending / unverified*. That status doesn't block local cleanup in move mode.
 - **No automation.** The skill doesn't render, transcode, or generate missing deliverables, and it ships no scripts. The agent performs the transfer with the host's own file tools after you approve.
+- **Playlist writes need a tool that isn't here yet.** `sponsored-playlist-sync` expects a playlist-add tool from the video app, which is being built separately. Until it's connected, the skill only reports and lists links. It also needs `yt-dlp` on the host.
 - **Recoverable deletion isn't guaranteed.** The skill uses the OS trash only when the host supports it, and otherwise says that removal is permanent.
 
 ## Evolving the skill
@@ -106,6 +112,7 @@ Run from the repo root:
 ```bash
 # Agent Skills frontmatter and naming (pip install skills-ref; provides `agentskills`)
 agentskills validate skills/archive-video-project
+agentskills validate skills/sponsored-playlist-sync
 
 # Claude Code manifest, paths, and skills (Claude Code CLI)
 claude plugin validate --strict .
