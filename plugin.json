@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ford",
-  "version": "0.4.0",
-  "description": "Portable, instruction-only agent skills for developer-education video production, with draft skills for archiving finished video projects, keeping a sponsor's YouTube playlist complete, and triaging a work inbox.",
+  "version": "0.5.0",
+  "description": "Portable, instruction-only agent skills for developer-education video production, with draft skills for archiving finished video projects, keeping a sponsor's YouTube playlist complete, triaging a work inbox and Slack, and drafting in the user's email and Slack voice.",
   "author": {
     "name": "chantastic",
     "url": "https://github.com/chantastic"
@@ -17,6 +17,8 @@
     "sponsorship",
     "email",
     "gmail",
+    "slack",
+    "writing-voice",
     "skills"
   ]
 }

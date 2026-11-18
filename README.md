@@ -1,6 +1,6 @@
 # ford
 
-Workplace agent skills for my developer educator job: video production, sponsorships, and inbox triage.
+Workplace agent skills for my developer educator job: video production, sponsorships, inbox and Slack triage, and writing in my voice.
 
 Ford is a small, portable, instruction-only plugin. It packages [Agent Skills](https://agentskills.io/specification) in the [Agent Plugins](https://agent-plugins.org) format, with a compatibility manifest for Claude Code. It contains no hooks, MCP servers, or scripts.
 
@@ -11,8 +11,11 @@ Ford is a small, portable, instruction-only plugin. It packages [Agent Skills](h
 | Skill | What it does |
 | --- | --- |
 | [`archive-video-project`](skills/archive-video-project/SKILL.md) | Moves a finished video project (final exports, thumbnail, captions, and original source) into a Google Drive destination that you configure. It inventories first and proposes a source-to-archive mapping for approval. Then it copies, verifies the transferred contents, and removes only the exact originals the approved mapping lists. Cloud sync is reported separately and doesn't block that cleanup. The skill never overwrites files and never deletes from the archive or any Drive-synced folder. |
-| [`email-triage`](skills/email-triage/SKILL.md) | Triages your work inbox toward inbox zero by the end of each session you engage. Scheduled passes draft a full reply in your voice for every direct thread (you're the only recipient, you're named, or you're addressed), unsubscribe from and trash newsletters and marketing through the `List-Unsubscribe` header only, archive receipts and confirmations and list them in the next report, and archive other FYI and automated mail. Anything ambiguous counts as direct. When you engage, it shows direct items one at a time, most urgent first, with send, edit, or skip. It sends only when you say "send it" for the draft it just showed you. It never follows links in a message body, and it never permanently deletes or marks spam. |
+| [`email-triage`](skills/email-triage/SKILL.md) | Triages your work inbox toward inbox zero by the end of each session you engage, and runs a read-only Slack pass for DMs, group DMs, @mentions, and threads still waiting on you. Scheduled passes draft a full reply in your voice for every direct email (you're the only recipient, you're named, or you're addressed) and every waiting Slack message, using `email-voice` and `slack-voice`. They unsubscribe from and trash newsletters and marketing through the `List-Unsubscribe` header only, archive receipts and confirmations and list them in the next report, and archive other FYI and automated mail. Anything ambiguous counts as direct. When you engage, it shows email and Slack drafts one at a time, most urgent first, with send, edit, or skip. It sends only when you say "send it" for the draft it just showed you. It never follows links in a message body, never permanently deletes or marks spam, and never writes to Slack except an approved draft. |
 | [`sponsored-playlist-sync`](skills/sponsored-playlist-sync/SKILL.md) | Keeps a sponsor's "Sponsored by" YouTube playlist complete. It collects live placements from the sponsor's partner Slack channels, excludes review cuts and non-YouTube or not-yet-live placements, and verifies each video with `yt-dlp` (public, creator's main channel, full episode, sponsor mentioned). Then it diffs against the playlist, adds missing videos with a playlist-add tool if one is connected (otherwise hands you a list of links), re-verifies, and reports what's missing, excluded, or duplicated. It only adds; it never removes or reorders playlist entries. |
+| [`writing-voice`](skills/writing-voice/SKILL.md) | The base voice for anything drafted as you: lead with the point, plain words, short, warm but not performative, an unmistakable yes or no, dry self-deprecating humor when it fits, no corporate filler, formality matched to the audience, links pasted directly. Channel skills load it first and adapt it. |
+| [`email-voice`](skills/email-voice/SKILL.md) | Builds on `writing-voice` for email: greetings and sign-offs, a composed and a casual register, length and structure, registers by audience (close partners, internal billing, vendors, new contacts, formal or legal, difficult threads), scheduling, recurring phrases, a checklist, and before/after examples. |
+| [`slack-voice`](skills/slack-voice/SKILL.md) | Builds on `writing-voice` for Slack: lowercase by default, no greetings or sign-offs, very short messages and fragments, registers by place (close DMs, group DMs, internal channels, partner-shared channels, company-wide posts), recurring phrases, a checklist, and before/after examples. |
 
 ## Archive layout
 
@@ -44,8 +47,14 @@ ford/
 │   │       └── archive-manifest-template.md
 │   ├── email-triage/
 │   │   └── SKILL.md
-│   └── sponsored-playlist-sync/
-│       └── SKILL.md
+│   ├── email-voice/
+│   │   └── SKILL.md               # builds on writing-voice
+│   ├── slack-voice/
+│   │   └── SKILL.md               # builds on writing-voice
+│   ├── sponsored-playlist-sync/
+│   │   └── SKILL.md
+│   └── writing-voice/
+│       └── SKILL.md               # base voice for every channel
 └── README.md
 ```
 
@@ -80,7 +89,9 @@ For access, the skill uses either a Google Drive connector that the host provide
 
 `sponsored-playlist-sync` works the same way. It refers to `{sponsor}`, `{sponsor-playlist}`, `{partner-channels}` (with former names), and `{creator-channels}` only by placeholder. Keep the real playlist URL, Slack channel IDs, and YouTube channel IDs in your own memory or host configuration, not in this repo. It reads Slack through a connector you authorize and writes to the playlist only through a connected playlist-add tool. Without one, it hands you links to paste into YouTube Studio.
 
-`email-triage` refers to `{inbox}`, `{user-names}`, `{billing-address}`, and `{billing-cc}` by placeholder, and keeps `{last-pass}`, its draft queue, and unreported receipts in the host's own memory. It reaches mail, Slack, and Calendar only through connectors you authorize, and it reads Slack and Calendar without writing to them. Don't commit mailbox addresses, names, message or thread IDs, or message contents to this repo.
+`email-triage` refers to `{inbox}`, `{slack-workspace}`, `{slack-user}`, `{assistant-identities}`, `{user-names}`, `{billing-address}`, and `{billing-cc}` by placeholder, and keeps `{last-pass}`, its draft queue, and unreported receipts in the host's own memory. It reaches mail, Slack, and Calendar only through connectors you authorize; it reads Calendar without writing, and writes to Slack only an approved draft. Don't commit mailbox addresses, names, Slack user or channel IDs, message or thread IDs, or message contents to this repo.
+
+The voice skills (`writing-voice`, `email-voice`, `slack-voice`) were distilled from real sent mail and Slack messages, then anonymized: examples use `[Name]` and paraphrase anything sensitive. `email-voice` takes the sign-off names `{casual-name}`, `{first-name}`, `{full-name}`, and `{company}` as configuration. Keep the source samples, real names, and the organization out of this repo.
 
 ## Limitations
 
@@ -89,6 +100,7 @@ For access, the skill uses either a Google Drive connector that the host provide
 - **No automation.** The skill doesn't render, transcode, or generate missing deliverables, and it ships no scripts. The agent performs the transfer with the host's own file tools after you approve.
 - **Playlist writes need a tool that isn't here yet.** `sponsored-playlist-sync` expects a playlist-add tool from the video app, which is being built separately. Until it's connected, the skill only reports and lists links. It also needs `yt-dlp` on the host.
 - **Triage is judgment, and some actions stick.** `email-triage` can misjudge a thread. Archives are reversible and trash is recoverable for a while, but unsubscribes aren't, and "send it" sends immediately. Review its first few passes before trusting it to run unattended. Header unsubscribes also need the host to send an HTTPS POST or an email to the header's address; without that, the skill only trashes.
+- **Voice is an approximation.** The voice skills describe habits, not a script. Drafts still need the user's review, and the guides should be refreshed from newer messages as the user's voice drifts.
 - **Recoverable deletion isn't guaranteed.** The skill uses the OS trash only when the host supports it, and otherwise says that removal is permanent.
 
 ## Evolving the skill
@@ -119,7 +131,10 @@ Run from the repo root:
 # Agent Skills frontmatter and naming (pip install skills-ref; provides `agentskills`)
 agentskills validate skills/archive-video-project
 agentskills validate skills/email-triage
+agentskills validate skills/email-voice
+agentskills validate skills/slack-voice
 agentskills validate skills/sponsored-playlist-sync
+agentskills validate skills/writing-voice
 
 # Claude Code manifest, paths, and skills (Claude Code CLI)
 claude plugin validate --strict .
