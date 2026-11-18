@@ -1,7 +1,7 @@
 {
   "name": "ford",
-  "version": "0.2.0",
-  "description": "Portable, instruction-only agent skills for developer-education video production, with draft skills for archiving finished video projects and keeping a sponsor's YouTube playlist complete.",
+  "version": "0.3.0",
+  "description": "Portable, instruction-only agent skills for developer-education video production, with draft skills for archiving finished video projects, keeping a sponsor's YouTube playlist complete, and triaging a work inbox.",
   "author": {
     "name": "chantastic",
     "url": "https://github.com/chantastic"
