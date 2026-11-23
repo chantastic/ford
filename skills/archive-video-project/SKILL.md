@@ -1,6 +1,6 @@
 ---
 name: archive-video-project
-description: Archive a finished video project into a user-configured Google Drive destination, keeping only the deliverables and critical source. Use when the user wants to archive, back up, slim down, or hand off a completed video project (final exports, thumbnail, captions, and critical source footage), or check an existing archive. Inventories only user-authorized folders, proposes a slimmed source-to-archive mapping with keep and drop lists, transcode list, file sizes, missing deliverables, and collisions, and after approval moves the listed files by copying, verifying the transferred contents, and only then removing those exact originals so no local copy remains. Reports cloud sync separately from the local transfer. Keeps critical source (compressing uncompressed footage to HEVC), drops timelines, intermediate copies, backups, and duplicates, never overwrites, never deletes from the archive or a Drive-synced tree without an explicit instruction for those exact items, and never changes sharing.
+description: Archive a finished video project into the DevEd shared-drive folder by default (or an event destination when the user says so), reusing the project's existing folder if there is one, keeping only the deliverables and critical source. Use when the user wants to archive, back up, slim down, or hand off a completed video project (final exports, thumbnail, captions, and critical source footage), or check an existing archive. Inventories only user-authorized folders, proposes a slimmed source-to-archive mapping with keep and drop lists, transcode list, file sizes, missing deliverables, and collisions, and after approval moves the listed files by copying, verifying the transferred contents, and only then removing those exact originals so no local copy remains. Reports cloud sync separately from the local transfer. Keeps critical source (compressing uncompressed footage to HEVC), drops timelines, intermediate copies, backups, and duplicates, never overwrites, never deletes from the archive or a Drive-synced tree without an explicit instruction for those exact items, and never changes sharing.
 ---
 
 # Archive video project
@@ -26,10 +26,10 @@ Move a finished video project into an archive folder that is easy to retrieve la
 
 ## Target layout
 
-Each archived project is one folder named `yyyy-mm-dd-{video-name}`, using the publish date (or the date the user gives) and a short, human-readable kebab-case name. The five deliverables (archive, youtube, social, captions, thumbnail) sit at the root so they are easy to find. See [references/naming-and-layout.md](references/naming-and-layout.md) for what each one is. Everything else goes in `source/`. There is no `exports/` folder.
+Each archived project is one folder named `{YYYY-MM-DD} {Project name}` (for example `2026-09-11 Example Project`), using the project or publish date (or the date the user gives) and a short, human-readable project name. Files inside use the kebab-case form `yyyy-mm-dd-{video-name}`. The five deliverables (archive, youtube, social, captions, thumbnail) sit at the root so they are easy to find. See [references/naming-and-layout.md](references/naming-and-layout.md) for what each one is. Everything else goes in `source/`. There is no `exports/` folder.
 
 ```text
-yyyy-mm-dd-{video-name}/
+{YYYY-MM-DD} {Project name}/
 ├── yyyy-mm-dd-{video-name}-archive.mov        # master export (H.265 these days)
 ├── yyyy-mm-dd-{video-name}-youtube.mp4        # H.264 YouTube upload
 ├── yyyy-mm-dd-{video-name}-social.mp4         # H.264, 1080p, for social platforms
@@ -43,14 +43,18 @@ yyyy-mm-dd-{video-name}/
 
 ## Destinations
 
-The user configures destinations privately at runtime, for example in their own host settings or by telling you during the task. This skill names them by project type only:
+The user configures destinations privately at runtime, for example in their own host settings or by telling you during the task. This skill names them by role only:
 
 | Parameter | Use for |
 | --- | --- |
-| `{archive-root:educational}` | Educational and announcement videos |
-| `{archive-root:event}` | Event projects with external collaborators |
+| `{archive-root:deved}` | **Default.** Most videos go in the DevEd shared-drive folder, as `{YYYY-MM-DD} {Project name}` |
+| `{archive-root:event}` | Exception: event projects, only when the user says so |
 
-If the destination for the project type is not configured, ask for it. Do not guess or search for it. Before transferring into an event destination, remind the user that it may be public or shared with external collaborators, and get explicit confirmation that everything being transferred, raw footage included, is appropriate for them to see.
+Use the DevEd folder unless the user says the project is an event. If the destination is not configured, ask for it. Do not guess where it is, and do not search outside it.
+
+**Look for an existing project folder first.** Before choosing a destination folder, look inside the archive root the user named for a folder that already belongs to this project, matching by project name and date. If one exists, archive into it instead of creating a new one. List its existing contents in the plan. Skip files that are byte-identical to the incoming ones (compare SHA-256) and report them as already archived. Report any other conflict, where the same path holds different content, and never overwrite it; the user decides. Only create a new folder when no existing one matches, and say so in the plan. If more than one folder could match, list them and ask.
+
+Before transferring into an event destination, remind the user that it may be public or shared with external collaborators, and get explicit confirmation that everything being transferred, raw footage included, is appropriate for them to see.
 
 ## Workflow
 
@@ -59,7 +63,7 @@ If the destination for the project type is not configured, ask for it. Do not gu
 Confirm all of the following:
 
 - The local project root.
-- The project type, and with it, the destination.
+- The destination: the DevEd folder by default, or an event destination only if the user says so.
 - The video name and date for the folder name.
 - The mode. **Move** is the default: transfer, verify, then remove the listed originals. **Copy** keeps the local originals; the user can always choose it.
 
@@ -67,7 +71,7 @@ Then check how the source and destination relate. Decide whether the local proje
 
 ### 2. Inventory
 
-List every file and folder under the project root, with its relative path, size in bytes, and modification time. Treat app bundles (such as `.screenstudio`), ZIP archives, and camera-card trees as single units, and record both their total sizes and their file counts. Look at the destination too: whether the project folder already exists there and what it contains.
+List every file and folder under the project root, with its relative path, size in bytes, and modification time. Treat app bundles (such as `.screenstudio`), ZIP archives, and camera-card trees as single units, and record both their total sizes and their file counts. Look at the destination too: whether a matching project folder already exists there (see [Destinations](#destinations)) and what it contains.
 
 Read only. Do not open projects in their editing apps, because that can auto-save or relink media.
 
@@ -80,7 +84,8 @@ Fill in [assets/archive-manifest-template.md](assets/archive-manifest-template.m
 - **Not archived (drop list):** timelines, intermediate copies, backups, duplicate media (confirmed with `cmp`), and temp files, each with a reason, following [references/what-to-keep.md](references/what-to-keep.md).
 - **Transcodes:** every uncompressed or huge-intermediate clip to be transcoded to HEVC, with current and estimated size. Transcode by default, for all footage.
 - **Slimmed size:** total to transfer against the original size, and the free space at the destination and on the local disk.
-- **Collisions:** any destination path that already exists or that two sources would share. Never overwrite. Propose keeping both or skipping, and let the user decide.
+- **Existing folder:** whether you are archiving into an existing project folder, with its current contents listed. Files that are byte-identical (SHA-256) are skipped and reported as already archived.
+- **Collisions:** any destination path that already exists with different content, or that two sources would share. Never overwrite. Propose keeping both or skipping, and let the user decide.
 - **Totals:** file count and bytes to transfer, compared with the free space at the destination if that is visible.
 - **Removal list (move mode):** the exact original paths that will be removed after verification. This is the transferred items plus the dropped items, minus anything inside a Drive-synced tree or the archive. Dropped items go to the Trash with the rest, so no copy stays behind.
 

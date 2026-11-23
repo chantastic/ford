@@ -3,11 +3,12 @@
 > Proposed. Nothing has been transferred or removed until the approval below is checked.
 
 - **Local project root:** `{local-project-root}`
-- **Project type:** educational / event
+- **Destination type:** DevEd (default) / event (only if the user said so)
 - **Mode:** move (copy, verify, remove listed originals) / copy (keep local originals)
-- **Destination:** `{archive-root:<type>}/yyyy-mm-dd-{video-name}/`
+- **Destination:** `{archive-root:deved}/{YYYY-MM-DD} {Project name}/` (or `{archive-root:event}/...`)
 - **Source inside a Drive-synced tree:** yes / no (if yes, the source files are cloud-backed and are never removed; copy only)
-- **Destination already exists:** yes / no
+- **Existing project folder found:** yes (archiving into it; contents listed below) / no (new folder)
+- **Existing contents:** {list; byte-identical files (SHA-256) are skipped and reported as already archived}
 - **Shared with external collaborators:** yes / no / unknown (event destinations: confirm the contents are appropriate)
 
 ## Deliverables (archive root)
@@ -46,7 +47,8 @@
 
 | Archive path | Conflict | Proposed resolution |
 | --- | --- | --- |
-| | | keep both / skip (never overwrite) |
+| | Same path, different content | keep both / skip (never overwrite) |
+| | Byte-identical (SHA-256) | skip; already archived |
 
 ## Totals
 
