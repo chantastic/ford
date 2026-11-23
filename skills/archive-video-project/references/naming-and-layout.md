@@ -6,12 +6,17 @@ The names below are generic patterns. Real projects, especially older ones, will
 
 | Deliverable | Target name | Accept as a candidate | Do not assume |
 | --- | --- | --- | --- |
-| Full-quality master | `yyyy-mm-dd-{video-name}-youtube.mov` | `.mov` or other high-bitrate render of the final cut | That the biggest or newest `.mov` is the final cut |
-| X transcode | `yyyy-mm-dd-{video-name}-x.mp4` | `.mp4` render sized for X | That any `.mp4` is the X version; it could be a draft or a review cut |
+| Archive master | `yyyy-mm-dd-{video-name}-archive.mov` | The full-quality master export of the final cut, labeled ` - archive` in the project. H.265 these days. | That the biggest or newest `.mov` is the final cut |
+| YouTube upload | `yyyy-mm-dd-{video-name}-youtube.mp4` | The H.264 file uploaded to YouTube, labeled ` - youtube`, or ` - upload` on older projects. H.264 because YouTube is reported to handle it better. | That any `.mp4` is the upload; it could be a draft or a review cut |
+| Social cut | `yyyy-mm-dd-{video-name}-social.mp4` | H.264 at 1080p, following the social platforms' bitrate guidance, labeled ` - social` | That a vertical short or teaser is the social cut |
+| Captions | `yyyy-mm-dd-{video-name}-captions.srt` | `.srt`. An `.itt` (iTunes Timed Text) or other format found on older projects keeps its extension; don't convert it. | That a text file is the final transcript |
 | Thumbnail | `yyyy-mm-dd-{video-name}-thumbnail.jpg` or `.png` | Still image used as the published thumbnail | That any image in the project is the thumbnail |
-| Captions | `yyyy-mm-dd-{video-name}-transcript.srt` | `.srt`; `.itt` (iTunes Timed Text) is a valid variant. Keep its extension; don't convert it. | That a text file is the final transcript |
 
-If a deliverable is missing, list it as missing. Do not produce it unless the user asks for that as a separate task.
+### Older projects and `- upload`
+
+On older projects (2026 and earlier), the labels differ. A file labeled ` - upload` is ambiguous: it could be the archive master or the YouTube upload. If it is the only master-class export, it is an acceptable archive master and also serves as the YouTube upload. Archive it once and name it for both roles in the manifest, rather than inventing a second file. If both ` - upload` and a ` - archive` exist, treat ` - archive` as the archive master and ` - upload` as the YouTube upload. Confirm with the user when it is unclear.
+
+If a deliverable is missing, report it as missing in the plan. Do not produce it unless the user asks for that as a separate task.
 
 ## Source (`source/`)
 

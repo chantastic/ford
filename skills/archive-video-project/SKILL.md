@@ -26,16 +26,17 @@ Move a finished video project into an archive folder that is easy to retrieve la
 
 ## Target layout
 
-Each archived project is one folder named `yyyy-mm-dd-{video-name}`, using the publish date (or the date the user gives) and a short, human-readable kebab-case name. Deliverables sit at the root so they are easy to find. Everything else goes in `source/`. There is no `exports/` folder.
+Each archived project is one folder named `yyyy-mm-dd-{video-name}`, using the publish date (or the date the user gives) and a short, human-readable kebab-case name. The five deliverables (archive, youtube, social, captions, thumbnail) sit at the root so they are easy to find. See [references/naming-and-layout.md](references/naming-and-layout.md) for what each one is. Everything else goes in `source/`. There is no `exports/` folder.
 
 ```text
 yyyy-mm-dd-{video-name}/
-├── yyyy-mm-dd-{video-name}-youtube.mov        # full-quality master
-├── yyyy-mm-dd-{video-name}-x.mp4              # transcode for X
+├── yyyy-mm-dd-{video-name}-archive.mov        # master export (H.265 these days)
+├── yyyy-mm-dd-{video-name}-youtube.mp4        # H.264 YouTube upload
+├── yyyy-mm-dd-{video-name}-social.mp4         # H.264, 1080p, for social platforms
+├── yyyy-mm-dd-{video-name}-captions.srt       # captions
 ├── yyyy-mm-dd-{video-name}-thumbnail.jpg      # or .png
-├── yyyy-mm-dd-{video-name}-transcript.srt     # captions; keep .itt if that is what exists
 └── source/
-    └── ...                                     # original recordings and supporting assets
+    └── ...                                     # raw footage and supporting assets
 ```
 
 `source/` holds original recordings (including recorder project bundles and archives, such as a Screen Studio ZIP) and supporting video, sound effects, music, and images. Inside `source/`, keep the relative layout that project files depend on. See [references/naming-and-layout.md](references/naming-and-layout.md) for naming variants, older archives, and what counts as which deliverable.
@@ -74,7 +75,7 @@ Read only. Do not open projects in their editing apps, because that can auto-sav
 
 Fill in [assets/archive-manifest-template.md](assets/archive-manifest-template.md):
 
-- **Deliverables:** for each of the deliverables (master, X and vertical cuts, captions, thumbnail), the candidate source file, its size, its archive name, and your confidence. Mark each one as **missing** or **ambiguous** where that applies. For example, when two `.mov` files could be the master, list both and ask.
+- **Deliverables:** for each of the deliverables (archive, youtube, social, captions, thumbnail), the candidate source file, its size, its archive name, and your confidence. Mark each one as **missing** or **ambiguous** where that applies. For example, when two `.mov` files could be the archive master, list both and ask. Report every missing deliverable in the plan.
 - **Source:** every original recording and supporting asset, mapped to a path under `source/`.
 - **Not archived (drop list):** intermediate and review cuts, renders, backup libraries, editing-app libraries, duplicate media (confirmed with `cmp`), and temp files, each with a reason, following [references/what-to-keep.md](references/what-to-keep.md). Leaving out raw footage requires the user's explicit instruction.
 - **Transcode candidates:** the user's own huge intermediates, with current and estimated size. Ask before including anyone else's footage.

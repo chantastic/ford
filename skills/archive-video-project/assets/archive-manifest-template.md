@@ -14,10 +14,11 @@
 
 | Deliverable | Source (relative) | Bytes | Archive name | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Master | `exports/example-final.mov` | 12,345,678,901 | `yyyy-mm-dd-{video-name}-youtube.mov` | found / ambiguous / missing | |
-| X transcode | | | `yyyy-mm-dd-{video-name}-x.mp4` | missing | Not produced; will not be generated |
+| Archive master | `exports/example - archive.mov` | 12,345,678,901 | `yyyy-mm-dd-{video-name}-archive.mov` | found / ambiguous / missing | H.265; on older projects an `- upload` H.264 may serve |
+| YouTube | `exports/example - youtube.mp4` | 1,234,567,890 | `yyyy-mm-dd-{video-name}-youtube.mp4` | found / ambiguous / missing | H.264; an older `- upload` file may serve as both |
+| Social | | | `yyyy-mm-dd-{video-name}-social.mp4` | missing | H.264, 1080p. Not produced; will not be generated |
+| Captions | `example.srt` | 45,678 | `yyyy-mm-dd-{video-name}-captions.srt` | found | |
 | Thumbnail | `assets/thumb.png` | 1,234,567 | `yyyy-mm-dd-{video-name}-thumbnail.png` | ambiguous | Two candidate images; confirm |
-| Captions | `example.itt` | 45,678 | `yyyy-mm-dd-{video-name}-transcript.itt` | found | ITT kept as-is |
 
 ## Source (`source/`)
 
@@ -59,7 +60,7 @@
 
 | Item | Copy completed | Bytes match | Checksum match | Status |
 | --- | --- | --- | --- | --- |
-| `yyyy-mm-dd-{video-name}-youtube.mov` | yes / no | yes / no | yes / no (SHA-256) | verified / failed / not checked |
+| `yyyy-mm-dd-{video-name}-archive.mov` | yes / no | yes / no | yes / no (SHA-256) | verified / failed / not checked |
 | `source/screencapture/example-recording.zip` | yes / no | yes / no | yes / no | verified / failed / not checked |
 
 Overall transfer: **verified / not verified**. If not verified, nothing is removed.

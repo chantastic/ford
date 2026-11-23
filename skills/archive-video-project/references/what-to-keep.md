@@ -4,7 +4,7 @@ An archive holds the important stuff only. Apply these rules when filling in the
 
 ## Keep
 
-- **Deliverables at the root:** the master, the X and vertical cuts, captions or transcript, and the thumbnail. If the video is published, pull the thumbnail from the published video rather than using a draft frame. If it is not published, use the best candidate and say so.
+- **Deliverables at the root:** the five to look for in every project: `archive` (master export, H.265; on older projects an `upload` H.264 can serve), `youtube` (H.264), `social` (H.264, 1080p), `captions` (.srt), and `thumbnail`. See [naming-and-layout.md](naming-and-layout.md). Report any that are missing in the plan. If the video is published, pull the thumbnail from the published video rather than using a draft frame. If it is not published, use the best candidate and say so.
 - **Raw footage in `source/`:** camera files, screen recordings, and microphone tracks.
 - **Small planning files in `source/`:** scripts, outlines, transcripts, publish notes, and cut lists.
 - **Needed assets in `source/`:** music (with any license files), logos, and graphics.
