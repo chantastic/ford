@@ -81,7 +81,6 @@ Fill in [assets/archive-manifest-template.md](assets/archive-manifest-template.m
 - **Slimmed size:** total to transfer against the original size, and the free space at the destination and on the local disk.
 - **Collisions:** any destination path that already exists or that two sources would share. Never overwrite. Propose keeping both or skipping, and let the user decide.
 - **Totals:** file count and bytes to transfer, compared with the free space at the destination if that is visible.
-- **Linked media:** whether project files in `source/` reference media by paths that the new layout will change.
 - **Removal list (move mode):** the exact original paths that will be removed after verification. This is the transferred items plus the dropped items, minus anything inside a Drive-synced tree or the archive. Dropped items go to the Trash with the rest, so no copy stays behind.
 
 ### 4. Get approval
@@ -111,7 +110,7 @@ If any item fails or cannot be checked, the transfer is **not verified**. Remove
 Only when every item is verified:
 
 - Remove only the exact paths on the approved removal list. Never remove anything inside the archive, inside a Drive-synced tree, or outside the list.
-- Prefer recoverable removal, such as moving to the operating system's trash, when the host actually supports it. If only permanent removal is available, say so before acting. Trashed files still use disk space until the trash is emptied.
+- Prefer recoverable removal: the Mac Trash for local originals. If only permanent removal is available, say so before acting. Trashed files still use disk space until the trash is emptied.
 - Move the original to the Mac Trash only after verification, so no copy remains in the original location. Leave emptied folders and the project root in place unless the user asks otherwise.
 - Check free disk space before the next batch. The Trash holds space until it is emptied, so ask the user to empty it when space is tight.
 - If a removal fails partway, stop and report exactly what was and wasn't removed.

@@ -15,7 +15,7 @@ Required before removing any original:
 
 1. **Copy completed:** the copy operation reported success for every item, with no skipped or partial files.
 2. **Byte count:** each destination file's size equals the source's. For a folder, bundle, or camera-card tree, the file count and total bytes also match.
-3. **Checksum:** a checksum (for example SHA-256 or MD5) of the destination contents, read back from disk, matches the source. For folders and bundles, compare per file.
+3. **Checksum:** a checksum (SHA-256 for the local transfer check) of the destination contents, read back from disk, matches the source. For folders and bundles, compare per file.
 
 Insufficient on their own:
 

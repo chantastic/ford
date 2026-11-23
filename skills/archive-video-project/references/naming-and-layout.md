@@ -15,14 +15,16 @@ If a deliverable is missing, list it as missing. Do not produce it unless the us
 
 ## Source (`source/`)
 
-Everything that is not a deliverable but is needed to understand or rebuild the video:
+The important stuff that is not a deliverable (see [what-to-keep.md](what-to-keep.md) for the full keep and drop rules):
 
-- Original recordings: camera files, screen recordings, microphone tracks.
+- Raw footage: camera files, screen recordings, microphone tracks. The user's own huge ProRes a-roll is transcoded to HEVC; see what-to-keep.md.
 - Recorder project bundles and archives, such as a `.screenstudio` bundle or a Screen Studio ZIP export. Copy them as single units. Do not unzip or repackage them.
-- Editing project files, such as `.drp`, `.prproj`, `.fcpbundle`, and `.aep`.
-- Supporting assets: B-roll, sound effects, music (with any license files), images, and graphics.
+- Small planning, transcript, publish, and script files.
+- Supporting assets: B-roll, sound effects, music (with any license files), logos, images, and graphics.
 
-Keep camera-card trees (such as `DCIM/…` or `PRIVATE/…`) intact, and keep checksum sidecars (`.mhl`, `.md5`) next to the files they describe. If an editing project references media by relative path, keep that relative arrangement inside `source/`. If the new layout would break references, say so in the manifest rather than quietly reshuffling files.
+Do not archive editing-app libraries or project files (`.fcpbundle`, `.prproj`, `.drp`, `.aep`) unless the user asks for a specific one.
+
+Keep camera-card trees (such as `DCIM/…` or `PRIVATE/…`) intact, and keep checksum sidecars (`.mhl`, `.md5`) next to the files they describe.
 
 ## Variants you will see in existing projects
 
@@ -38,12 +40,8 @@ For a **new archive**, map these into the target layout in the archive copy, and
 
 For an **existing archive**, report the variants and leave them alone. Do not rename or restructure older archives unless the user asks for that specific change.
 
-## Things that are usually not archived
+## Things that are not archived
 
-Propose leaving these out, with a reason, and let the user confirm. Never treat them as safe to delete:
+Intermediate and review cuts, render files and caches, backup and auto-save libraries, editing-app libraries, byte-identical duplicate media, and lock, temp, and `.DS_Store` files. See [what-to-keep.md](what-to-keep.md). List each with a reason in the manifest and let the user confirm.
 
-- Application caches and render caches (proxy, optimized media, waveform and peak files).
-- Auto-save folders, if the main project file is archived.
-- Operating system metadata (`.DS_Store`). AppleDouble `._*` files can carry real metadata, so ask about them.
-
-Rendered files are not automatically cache. A render can be a deliverable or a graphics asset, so confirm before leaving one out.
+Rendered files are not automatically droppable. A render can be a deliverable (a finished vertical short or teaser) or a graphics asset, so confirm before leaving one out.

@@ -24,13 +24,22 @@
 | Source (relative) | Bytes | Archive path | Unit | Notes |
 | --- | --- | --- | --- | --- |
 | `screencapture/example-recording.zip` | 98,765,432,100 | `source/screencapture/example-recording.zip` | ZIP, not unpacked | Original recording, unchanged |
-| `assets/` | 2,345,678,901 | `source/assets/` | folder | Music, SFX, images |
+| `assets/` | 2,345,678,901 | `source/assets/` | folder | Music, SFX, logos, images |
 
-## Not archived (proposed)
+## Transcode candidates
+
+| Source (relative) | Whose footage | Current bytes | Estimated bytes | Archive path | Approved |
+| --- | --- | --- | --- | --- | --- |
+| `edit/a-roll.mov` (ProRes) | user's own | 64,500,000,000 | 1,700,000,000 | `source/a-roll (HEVC).mov` | yes / no (ask first for anyone else's footage) |
+
+## Not archived: drop list (proposed)
 
 | Path (relative) | Bytes | Reason | Confirmed by user |
 | --- | --- | --- | --- |
 | `cache/` | 4,567,890,123 | Regenerable render cache | [ ] |
+| `edit/v1-review.mov` | 3,456,789,012 | Intermediate review cut | [ ] |
+| `Library.fcpbundle` | 9,876,543,210 | Editing-app library; not kept | [ ] |
+| `Library/Original Media/clip.mov` | 5,000,000,000 | Byte-identical duplicate (confirmed with `cmp`) | [ ] |
 
 ## Collisions
 
@@ -42,17 +51,15 @@
 
 - Files to transfer: N
 - Bytes to transfer: N
+- Slimmed total vs original: N vs N
 - Destination free space (if visible): N
-
-## Linked media
-
-- {project file} references media by path; the new `source/` layout changes / preserves those paths.
+- Local free disk space: N
 
 ## Transfer verification (gates removal)
 
 | Item | Copy completed | Bytes match | Checksum match | Status |
 | --- | --- | --- | --- | --- |
-| `yyyy-mm-dd-{video-name}-youtube.mov` | yes / no | yes / no | yes / no (SHA-256 or MD5) | verified / failed / not checked |
+| `yyyy-mm-dd-{video-name}-youtube.mov` | yes / no | yes / no | yes / no (SHA-256) | verified / failed / not checked |
 | `source/screencapture/example-recording.zip` | yes / no | yes / no | yes / no | verified / failed / not checked |
 
 Overall transfer: **verified / not verified**. If not verified, nothing is removed.
@@ -63,7 +70,7 @@ Exactly the originals covered by this request. Approving this manifest authorize
 
 | Local path (relative to project root) | Bytes | Inside synced tree or archive | Removal method | Result |
 | --- | --- | --- | --- | --- |
-| `exports/example-final.mov` | 12,345,678,901 | no (yes means excluded and kept) | OS trash / permanent (stated before acting) | removed / kept / failed |
+| `exports/example-final.mov` | 12,345,678,901 | no (yes means excluded and kept) | Mac Trash (after verification) | removed / kept / failed |
 | `screencapture/example-recording.zip` | 98,765,432,100 | no | OS trash | removed / kept / failed |
 
 Items under "Not archived" are left in place and are not on this list.
