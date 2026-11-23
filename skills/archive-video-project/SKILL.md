@@ -1,27 +1,27 @@
 ---
 name: archive-video-project
-description: Archive a finished video project into a user-configured Google Drive destination, keeping only the important files. Use when the user wants to archive, back up, slim down, or hand off a completed video project (final exports, thumbnail, captions, and raw footage), or check an existing archive. Inventories only user-authorized folders, proposes a slimmed source-to-archive mapping with keep and drop lists, transcode candidates, file sizes, missing deliverables, and collisions, and after approval moves the listed files by copying, verifying the transferred contents, and only then removing those exact originals so no local copy remains. Reports cloud sync separately from the local transfer. Keeps raw footage, drops intermediate cuts, renders, backups, duplicates, and editing-app libraries, never overwrites, never deletes from the archive or a Drive-synced tree without an explicit instruction for those exact items, and never changes sharing.
+description: Archive a finished video project into a user-configured Google Drive destination, keeping only the deliverables and critical source. Use when the user wants to archive, back up, slim down, or hand off a completed video project (final exports, thumbnail, captions, and critical source footage), or check an existing archive. Inventories only user-authorized folders, proposes a slimmed source-to-archive mapping with keep and drop lists, transcode list, file sizes, missing deliverables, and collisions, and after approval moves the listed files by copying, verifying the transferred contents, and only then removing those exact originals so no local copy remains. Reports cloud sync separately from the local transfer. Keeps critical source (compressing uncompressed footage to HEVC), drops timelines, intermediate copies, backups, and duplicates, never overwrites, never deletes from the archive or a Drive-synced tree without an explicit instruction for those exact items, and never changes sharing.
 ---
 
 # Archive video project
 
 > Draft skill. Review it before relying on it.
 
-Move a finished video project into an archive folder that is easy to retrieve later, keeping only the important stuff: deliverables, raw footage, and small planning and asset files. The move is safe: copy, verify the copied contents, then remove only the exact originals that the approved request covers. After a verified move, no copy stays in the original location. Cloud sync is reported separately and does not gate the local cleanup.
+Move a finished video project into an archive folder that is easy to retrieve later, keeping only the five root deliverables and one `source/` bucket of critical source. The move is safe: copy, verify the copied contents, then remove only the exact originals that the approved request covers. After a verified move, no copy stays in the original location. Cloud sync is reported separately and does not gate the local cleanup.
 
 ## Ground rules
 
 - **Authorized paths only.** Read only the local project root and the archive destination that the user names for this task. Do not browse other folders, accounts, or drives.
 - **Approval covers exact paths only.** Approving the archive manifest authorizes moving the exact original paths it lists, and nothing else. Do not widen it to other files, folders, or projects. A general policy statement is not approval for any specific archive; each archive needs its own approved manifest.
 - **Verify before removing.** Remove an original only after its transferred copy has been verified. If any verification fails, remove nothing.
-- **Raw footage stays as it is.** Archive raw recordings at full size, byte for byte. Do not trim or unzip them. Transcoding is allowed only in the cases in [references/what-to-keep.md](references/what-to-keep.md) (the user's own huge intermediates), and only as an approved line in the manifest. Ask before transcoding anyone else's footage.
-- **Keep only the important stuff.** Deliverables, raw footage, and small planning, transcript, publish, and script files plus needed assets. Drop intermediate and review cuts, renders, backup and auto-save libraries, duplicate media, and lock, temp, and `.DS_Store` files. Do not keep editing-app libraries (such as `.fcpbundle`). The rules and the confirm-before-dropping steps are in [references/what-to-keep.md](references/what-to-keep.md).
+- **Compress critical source.** Keep already-compressed footage (HEVC, H.264) as is. Transcode uncompressed or huge intermediates (ProRes and similar) to HEVC and drop the original, for all footage, by default. List each transcode in the plan. Do not trim or unzip recordings.
+- **Keep only the important stuff.** The five root deliverables, plus critical source and small supporting files in one `source/` bucket. Do not keep timelines (NLE projects and libraries, FCPXML, EDL) or intermediate copies (review cuts, renders, backups, duplicate media, lock, temp, and `.DS_Store` files). The rules and the confirm-before-dropping steps are in [references/what-to-keep.md](references/what-to-keep.md).
 - **Move, don't copy.** Once the archive is in place and verified by SHA-256, no copy remains in the original location (for example `~/Downloads`). The original goes to the Mac Trash.
 - **Never overwrite.** Existing destination files are collisions. Resolve each one with the user before transferring.
 - **Never delete from the archive or a Drive-synced tree on your own.** Deleting there deletes from the cloud, and the change propagates. The one exception is when the user explicitly asks to remove specific items (for example, slimming an existing archive): have Finder delete them, for example `osascript -e 'tell application "Finder" to delete POSIX file "/path/to/item"'`, so they land in Drive's trash and stay recoverable for about 30 days. Do not use `rm` inside the mount.
 - **Never change sharing.** Do not change permissions, owners, or link sharing on any file or folder. Destinations may already be shared with collaborators (see [Destinations](#destinations)).
 - **No credential shortcuts.** Use a Google Drive connector if the host provides one and the user has authorized it, or a Drive folder that is visibly mounted on the user's machine and that the user names. Never read access tokens, browser sessions, cookies, or a sync client's internal databases.
-- **Don't invent artifacts.** If a deliverable is missing, report it as missing. Do not render, transcode, or generate a stand-in. A file's type does not prove it is the final version; confirm with the user.
+- **Don't invent artifacts.** If a deliverable is missing, report it as missing. Do not render or generate a stand-in. A file's type does not prove it is the final version; confirm with the user.
 - **Keep private details out of shared places.** Destination links, folder IDs, account names, and local paths belong to this run's configuration only. Do not write them into skills, repos, or other shared files.
 
 ## Target layout
@@ -39,7 +39,7 @@ yyyy-mm-dd-{video-name}/
     └── ...                                     # raw footage and supporting assets
 ```
 
-`source/` holds original recordings (including recorder project bundles and archives, such as a Screen Studio ZIP) and supporting video, sound effects, music, and images. Inside `source/`, keep the relative layout that project files depend on. See [references/naming-and-layout.md](references/naming-and-layout.md) for naming variants, older archives, and what counts as which deliverable.
+`source/` is one bucket for everything that is not a deliverable and is worth keeping: critical source footage (interviews, a-roll, raw b-roll and screen recordings, including recorder archives such as a Screen Studio ZIP) and small supporting files. No sub-taxonomy is needed. See [references/naming-and-layout.md](references/naming-and-layout.md) for naming variants, older archives, and what counts as which deliverable.
 
 ## Destinations
 
@@ -76,9 +76,9 @@ Read only. Do not open projects in their editing apps, because that can auto-sav
 Fill in [assets/archive-manifest-template.md](assets/archive-manifest-template.md):
 
 - **Deliverables:** for each of the deliverables (archive, youtube, social, captions, thumbnail), the candidate source file, its size, its archive name, and your confidence. Mark each one as **missing** or **ambiguous** where that applies. For example, when two `.mov` files could be the archive master, list both and ask. Report every missing deliverable in the plan.
-- **Source:** every original recording and supporting asset, mapped to a path under `source/`.
-- **Not archived (drop list):** intermediate and review cuts, renders, backup libraries, editing-app libraries, duplicate media (confirmed with `cmp`), and temp files, each with a reason, following [references/what-to-keep.md](references/what-to-keep.md). Leaving out raw footage requires the user's explicit instruction.
-- **Transcode candidates:** the user's own huge intermediates, with current and estimated size. Ask before including anyone else's footage.
+- **Source:** the critical source and supporting files you propose to keep, each mapped to a path under `source/`, with a line on which footage you judged critical.
+- **Not archived (drop list):** timelines, intermediate copies, backups, duplicate media (confirmed with `cmp`), and temp files, each with a reason, following [references/what-to-keep.md](references/what-to-keep.md).
+- **Transcodes:** every uncompressed or huge-intermediate clip to be transcoded to HEVC, with current and estimated size. Transcode by default, for all footage.
 - **Slimmed size:** total to transfer against the original size, and the free space at the destination and on the local disk.
 - **Collisions:** any destination path that already exists or that two sources would share. Never overwrite. Propose keeping both or skipping, and let the user decide.
 - **Totals:** file count and bytes to transfer, compared with the free space at the destination if that is visible.

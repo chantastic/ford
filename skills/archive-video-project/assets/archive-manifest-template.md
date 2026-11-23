@@ -24,14 +24,14 @@
 
 | Source (relative) | Bytes | Archive path | Unit | Notes |
 | --- | --- | --- | --- | --- |
-| `screencapture/example-recording.zip` | 98,765,432,100 | `source/screencapture/example-recording.zip` | ZIP, not unpacked | Original recording, unchanged |
+| `screencapture/example-recording.zip` | 98,765,432,100 | `source/screencapture/example-recording.zip` | ZIP, not unpacked | Raw screen recording; critical source |
 | `assets/` | 2,345,678,901 | `source/assets/` | folder | Music, SFX, logos, images |
 
-## Transcode candidates
+## Transcodes (HEVC, by default)
 
-| Source (relative) | Whose footage | Current bytes | Estimated bytes | Archive path | Approved |
+| Source (relative) | Format | Current bytes | Estimated bytes | Archive path | Approved |
 | --- | --- | --- | --- | --- | --- |
-| `edit/a-roll.mov` (ProRes) | user's own | 64,500,000,000 | 1,700,000,000 | `source/a-roll (HEVC).mov` | yes / no (ask first for anyone else's footage) |
+| `edit/a-roll.mov` | ProRes | 64,500,000,000 | 1,700,000,000 | `source/a-roll (HEVC).mov` | yes / no |
 
 ## Not archived: drop list (proposed)
 
@@ -39,7 +39,7 @@
 | --- | --- | --- | --- |
 | `cache/` | 4,567,890,123 | Regenerable render cache | [ ] |
 | `edit/v1-review.mov` | 3,456,789,012 | Intermediate review cut | [ ] |
-| `Library.fcpbundle` | 9,876,543,210 | Editing-app library; not kept | [ ] |
+| `Library.fcpbundle` | 9,876,543,210 | Timeline; not kept | [ ] |
 | `Library/Original Media/clip.mov` | 5,000,000,000 | Byte-identical duplicate (confirmed with `cmp`) | [ ] |
 
 ## Collisions

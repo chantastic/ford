@@ -20,14 +20,14 @@ If a deliverable is missing, report it as missing in the plan. Do not produce it
 
 ## Source (`source/`)
 
-The important stuff that is not a deliverable (see [what-to-keep.md](what-to-keep.md) for the full keep and drop rules):
+Everything that is not a deliverable and is worth keeping goes in `source/`, in one bucket with no sub-taxonomy (see [what-to-keep.md](what-to-keep.md) for the full keep, drop, and compress rules):
 
-- Raw footage: camera files, screen recordings, microphone tracks. The user's own huge ProRes a-roll is transcoded to HEVC; see what-to-keep.md.
+- Critical source: interviews, a-roll, and similar primary footage, including raw b-roll and screen recordings. Uncompressed footage is transcoded to HEVC; compressed footage is kept as is.
 - Recorder project bundles and archives, such as a `.screenstudio` bundle or a Screen Studio ZIP export. Copy them as single units. Do not unzip or repackage them.
 - Small planning, transcript, publish, and script files.
 - Supporting assets: B-roll, sound effects, music (with any license files), logos, images, and graphics.
 
-Do not archive editing-app libraries or project files (`.fcpbundle`, `.prproj`, `.drp`, `.aep`) unless the user asks for a specific one.
+Do not archive timelines: NLE projects and libraries (`.fcpbundle`, `.prproj`, `.drp`, `.aep`) and FCPXML or EDL files.
 
 Keep camera-card trees (such as `DCIM/…` or `PRIVATE/…`) intact, and keep checksum sidecars (`.mhl`, `.md5`) next to the files they describe.
 
@@ -47,6 +47,6 @@ For an **existing archive**, report the variants and leave them alone. Do not re
 
 ## Things that are not archived
 
-Intermediate and review cuts, render files and caches, backup and auto-save libraries, editing-app libraries, byte-identical duplicate media, and lock, temp, and `.DS_Store` files. See [what-to-keep.md](what-to-keep.md). List each with a reason in the manifest and let the user confirm.
+Timelines, intermediate copies (review cuts, render files and caches), backup and auto-save libraries, byte-identical duplicate media, and lock, temp, and `.DS_Store` files. See [what-to-keep.md](what-to-keep.md). List each with a reason in the manifest and let the user confirm.
 
 Rendered files are not automatically droppable. A render can be a deliverable (a finished vertical short or teaser) or a graphics asset, so confirm before leaving one out.
